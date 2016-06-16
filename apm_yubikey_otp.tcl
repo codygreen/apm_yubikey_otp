@@ -39,7 +39,6 @@ when ACCESS_POLICY_AGENT_EVENT {
       if { [string is integer -strict $yubikey_serial] } {
         # convert to modnex
         set yubikey_serial [split [format %012x $yubikey_serial] ""]
-        log local0. "serial: $yubikey_serial"
         set yubikey_modhex ""
         #array set modhex_alphabet { 0 c 1 b 2 d 3 e 4 f 5 g 6 h 7 i 8 j 9 k A l B n C r D t E u F v }
         array set modhex_alphabet {0 c 1 b 2 d 3 e 4 f 5 g 6 h 7 i 8 j 9 k a l b n c r d t e u f v}
@@ -59,7 +58,6 @@ when ACCESS_POLICY_AGENT_EVENT {
       append yubico_get_request "Host: api2.yubico.com\r\n"
       append yubico_get_request "Accept: */*\r\n\r\n"
 
-      log local0. "get_request: $yubico_get_request"
       ## Create connection and send request
       set conn [connect -timeout 1000 -idle 30 $yubico_server:80]
       send -timeout 1000 -status send_status $conn $yubico_get_request
@@ -69,19 +67,11 @@ when ACCESS_POLICY_AGENT_EVENT {
       set nonce_r [getfield [getfield $yubico_response "\r\n" 11] "=" 2]
       set status [getfield [getfield $yubico_response "\r\n" 14] "=" 2]
 
-      log local0. "response: $yubico_response"
-      log local0. "otp: $auth_otp"
-      log local0. "otp_r: $otp_r"
-      log local0. "nonce: $nonce"
-      log local0. "nonce_r: $nonce_r"
-
       if {  ($auth_otp eq $otp_r) && ($nonce eq $nonce_r) } {
         ACCESS::session data set "session.custom.otp_valid" 1
       }
     } else {
       log local0.error "error with yubikey serial for $auth_user"
-      log local0. "serial: $yubikey_modhex"
-      log local0. "otp: $auth_otp"
     }
   }
 }
