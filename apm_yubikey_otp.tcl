@@ -12,8 +12,8 @@ proc randomNumberGenerator {length {chars "0123456789"}} {
 when ACCESS_POLICY_AGENT_EVENT {
   if { [ACCESS::policy agent_id] eq "otp_verify" } {
     # edit these variables
-    set yubico_client_id "XXX"
-    set yubico_secret_key "XXX" 
+    set yubico_client_id "XXXXXX"
+    set yubico_secret_key "XXXXXX" 
     # do not edit anything below this line
     set nonce [call randomNumberGenerator 25] 
 
