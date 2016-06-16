@@ -14,9 +14,9 @@ when ACCESS_POLICY_AGENT_EVENT {
     # edit these variables
     set yubico_client_id "XXX"
     set yubico_secret_key "XXX" 
+    # do not edit anything below this line
     set nonce [call randomNumberGenerator 25] 
 
-    # do not edit anything below this line
     set yubico_server [RESOLV::lookup @8.8.8.8 -a "api2.yubico.com"]
     if {$yubico_server == ""} {
       log local0.error "could not resolve Yubico server"
